@@ -1,5 +1,5 @@
-function [file, path] = uichoose(basepath, varargin)
-% UICHOOSER generic folder and/or file selection dialog box
+function [file, path] = uiget(basepath, varargin)
+% UIGET generic folder and/or file selection dialog box
 %
 % See also UIGETDIR, UIGETFILE
 
@@ -38,7 +38,7 @@ switch returnVal
         file = [];
         return
     otherwise
-        err = MException("uichooser:JFileWindow:unsupportedResult", ...
+        err = MException("uiget:JFileWindow:unsupportedResult", ...
                          "Unsupported result returned from JFileChooser: %s. " + ...
                          "Please consult the documentation for the current MATLAB Java version (%s)", ...
                          returnVal, string(java.lang.System.getProperty("java.version")));
@@ -60,7 +60,7 @@ function p = parseinput(in)
     % Initialize verbosely, since inputParser apparently doesn't have a
     % constructor that takes inputs...
     p = inputParser();
-    p.FunctionName = 'uichooser';
+    p.FunctionName = 'uiget';
     p.CaseSensitive = false;
     p.KeepUnmatched = true;
     p.PartialMatching = false;
