@@ -6,17 +6,18 @@ function [file, path] = uiget(basepath, varargin)
 if nargin == 0
     % Use current working directory if no inputs are passed
     basepath = pwd;
-elseif nargin > 1
-    % If we have more than 1 argument parse for Name,Value pairs
-    p = parseinput(varargin);
 end
+
+% Parse additional inputs
+p = buildParser();
+p.parse(varargin{:});
 
 % Initialize JFileChooser window
 % https://docs.oracle.com/javase/8/docs/api/javax/swing/JFileChooser.html
 jFC = javax.swing.JFileChooser(basepath);
 jFC.setFileSelectionMode(jFC.FILES_AND_DIRECTORIES);
 
-if exist('p', 'var') && p.Results.MultiSelect
+if p.Results.MultiSelect
     jFC.setMultiSelectionEnabled(true)
 else
     jFC.setMultiSelectionEnabled(false)
@@ -55,7 +56,7 @@ for ii = 1:npicked
 end
 end
 
-function p = parseinput(in)
+function p = buildParser()
     % Validate input Name,Value pairs
 
     % Initialize verbosely, since inputParser apparently doesn't have a
@@ -68,7 +69,4 @@ function p = parseinput(in)
     
     % Add Name,Value pairs
     p.addParameter('MultiSelect', false, @(x)islogical(x))
-    
-    % Parse input Name,Value pairs
-    p.parse(in{:});
 end
