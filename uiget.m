@@ -29,13 +29,14 @@ switch returnVal
         % Selection string will be empty if getSelectedFiles is used when
         % MultiSelect is disabled
         if jFC.isMultiSelectionEnabled
-            selectionstr = string(jFC.getSelectedFiles());
+            selectionStr = string(jFC.getSelectedFiles());
         else
-            selectionstr = string(jFC.getSelectedFile());
+            selectionStr = string(jFC.getSelectedFile());
         end
     case jFC.CANCEL_OPTION
         % Short-circuit: Return empty array on cancel
         file = [];
+        path = [];
         return
     otherwise
         err = MException("uiget:JFileWindow:unsupportedResult", ...
@@ -45,11 +46,11 @@ switch returnVal
         err.throw()
 end
 
-npicked = numel(selectionstr);
+npicked = numel(selectionStr);
 file = strings(npicked, 1);
 path = strings(npicked, 1);
 for ii = 1:npicked
-    [path(ii), filename, ext] = fileparts(selectionstr(ii));
+    [path(ii), filename, ext] = fileparts(selectionStr(ii));
     file(ii) = filename + ext;
 end
 end
