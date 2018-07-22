@@ -54,6 +54,24 @@ for ii = 1:npicked
     [path(ii), filename, ext] = fileparts(selectionStr(ii));
     file(ii) = filename + ext;
 end
+
+% Simplify path output if needed
+if p.Results.ScalarPathOutput
+    % Check for number of unique paths
+    % If more than one is present, use the first & throw a warning
+    uniquepaths = unique(path);
+    nuniquepaths = numel(uniquepaths);
+    if nuniquepaths == 1
+        path = uniquepaths;
+    elseif nuniquepaths > 1
+        path = uniquepaths(1);
+        
+        warning("uiget:ScalarPathOutput:multipleuniquepaths", ...
+                "Multiple unique paths selected, ignoring %u extra selections", ...
+                nuniquepaths - 1);
+    end
+end
+
 end
 
 function p = buildParser()
@@ -69,4 +87,5 @@ function p = buildParser()
     
     % Add Name,Value pairs
     p.addParameter('MultiSelect', false, @(x)islogical(x))
+    p.addParameter('ScalarPathOutput', false, @(x)islogical(x))
 end
