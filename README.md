@@ -10,11 +10,13 @@ This utility was inspired by: [Making a dialog where the user can choose either 
 
 ## Syntax
 
-`file = uiget`
+`file = uiget()`
 
-`[file, path] = uiget`
+`[file, path] = uiget()`
 
 `___ = uiget(basepath)`
+
+`___ = uiget(___, Name, Value)`
 
 
 ## Examples
@@ -23,4 +25,5 @@ This utility was inspired by: [Making a dialog where the user can choose either 
 ## Name, Value Pairs
 | Parameter | Description | Type | Default Value |
 | :--:      | :--:        | :--: | :--:          |
-| `'MultiSelect'` | Specify whether a user can select multiple files or folders | `logical` | false |
+| `'MultiSelect'` | Specify whether a user can select multiple files or folders | `logical` | `false` |
+| `'ScalarPathOutput'` | Specify whether a scalar path is output when using `'MultiSelect'` | `logical` | `false` |
