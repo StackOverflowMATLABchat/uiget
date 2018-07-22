@@ -1,5 +1,5 @@
-function [file, path] = uichoose(basepath, varargin)
-% UICHOOSER generic folder and/or file selection dialog box
+function [file, path] = uiget(basepath, varargin)
+% UIGET generic folder and/or file selection dialog box
 %
 % See also UIGETDIR, UIGETFILE
 
@@ -29,27 +29,28 @@ switch returnVal
         % Selection string will be empty if getSelectedFiles is used when
         % MultiSelect is disabled
         if jFC.isMultiSelectionEnabled
-            selectionstr = string(jFC.getSelectedFiles());
+            selectionStr = string(jFC.getSelectedFiles());
         else
-            selectionstr = string(jFC.getSelectedFile());
+            selectionStr = string(jFC.getSelectedFile());
         end
     case jFC.CANCEL_OPTION
         % Short-circuit: Return empty array on cancel
         file = [];
+        path = [];
         return
     otherwise
-        err = MException("uichooser:JFileWindow:unsupportedResult", ...
+        err = MException("uiget:JFileWindow:unsupportedResult", ...
                          "Unsupported result returned from JFileChooser: %s. " + ...
                          "Please consult the documentation for the current MATLAB Java version (%s)", ...
                          returnVal, string(java.lang.System.getProperty("java.version")));
         err.throw()
 end
 
-npicked = numel(selectionstr);
+npicked = numel(selectionStr);
 file = strings(npicked, 1);
 path = strings(npicked, 1);
 for ii = 1:npicked
-    [path(ii), filename, ext] = fileparts(selectionstr(ii));
+    [path(ii), filename, ext] = fileparts(selectionStr(ii));
     file(ii) = filename + ext;
 end
 end
@@ -60,7 +61,7 @@ function p = parseinput(in)
     % Initialize verbosely, since inputParser apparently doesn't have a
     % constructor that takes inputs...
     p = inputParser();
-    p.FunctionName = 'uichooser';
+    p.FunctionName = 'uiget';
     p.CaseSensitive = false;
     p.KeepUnmatched = true;
     p.PartialMatching = false;
