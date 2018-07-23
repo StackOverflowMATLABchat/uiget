@@ -1,4 +1,4 @@
-![Minimum Version](https://img.shields.io/badge/Requires-R2016b%20%28v8.4%29-orange.svg)
+![Minimum Version](https://img.shields.io/badge/Requires-R2016b%20%28v8.4%29-orange.svg) [![MATLAB FEX](https://img.shields.io/badge/MATLAB%20FEX-legtools-brightgreen.svg)](https://www.mathworks.com/matlabcentral/fileexchange/68307-uiget)
 
 # UIGET
 
