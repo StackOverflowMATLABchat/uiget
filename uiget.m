@@ -15,8 +15,22 @@ p.parse(varargin{:});
 % Initialize JFileChooser window
 % https://docs.oracle.com/javase/8/docs/api/javax/swing/JFileChooser.html
 jFC = javax.swing.JFileChooser(basepath);
-jFC.setFileSelectionMode(jFC.FILES_AND_DIRECTORIES);
+jFC.setFileSelectionMode(jFC.FILES_AND_DIRECTORIES)
 jFC.setDialogTitle(p.Results.Title)
+
+% Build file filter
+if ~isempty(p.Results.ExtensionFilter)
+    extensions = parsefilter(p.Results.ExtensionFilter(:, 1));
+    
+    nfilters = size(p.Results.ExtensionFilter, 1);
+    for ii = 1:nfilters
+        jExtensionFilter = javax.swing.filechooser.FileNameExtensionFilter(p.Results.Filter{ii, 2}, extensions{ii});
+        jFC.addChoosableFileFilter(jExtensionFilter)
+    end
+    
+    tmp = jFC.getChoosableFileFilters();
+    jFC.setFileFilter(tmp(2))
+end
 
 if p.Results.MultiSelect
     jFC.setMultiSelectionEnabled(true)
@@ -81,18 +95,33 @@ end
 end
 
 function p = buildParser()
-    % Validate input Name,Value pairs
+% Validate input Name,Value pairs
 
-    % Initialize verbosely, since inputParser apparently doesn't have a
-    % constructor that takes inputs...
-    p = inputParser();
-    p.FunctionName = 'uiget';
-    p.CaseSensitive = false;
-    p.KeepUnmatched = true;
-    p.PartialMatching = false;
-    
-    % Add Name,Value pairs
-    p.addParameter('MultiSelect', false, @(x)islogical(x))
-    p.addParameter('ScalarPathOutput', false, @(x)islogical(x))
-    p.addParameter('Title', 'Select File or Folder', @(x)validateattributes(x, {'char', 'string'}, {'scalartext'}))
+% Initialize verbosely, since inputParser apparently doesn't have a
+% constructor that takes inputs...
+p = inputParser();
+p.FunctionName = 'uiget';
+p.CaseSensitive = false;
+p.KeepUnmatched = true;
+p.PartialMatching = false;
+
+% Add Name,Value pairs
+p.addParameter('MultiSelect', false, @(x)islogical(x))
+p.addParameter('ScalarPathOutput', false, @(x)islogical(x))
+p.addParameter('Title', 'Select File or Folder', @(x)validateattributes(x, {'char', 'string'}, {'scalartext'}))
+p.addParameter('ExtensionFilter', [], @(x)validateattributes(x, {'cell'}, {'ncols', 2}))
+end
+
+function extensions = parsefilter(incell)
+% Parse the extension filter extensions into a format usable by 
+% javax.swing.filechooser.FileNameExtensionFilter
+% 
+% Since we're keeping with the uigetdir-esque extension syntax
+% (e.g. *.extension), we need strip off '*.' from each for compatibility
+% with the Java component.
+extensions = cell(size(incell));
+for ii = 1:numel(incell)
+    exp = '\*\.(\w+)';
+    extensions{ii} = string(regexp(incell{ii}, exp, 'tokens'));
+end
 end
