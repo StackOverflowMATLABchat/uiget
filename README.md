@@ -16,13 +16,84 @@ This utility was inspired by: [Making a dialog where the user can choose either 
 
 `___ = uiget(basepath)`
 
-`___ = uiget(___, Name, Value)`
+`___ = uiget(basepath, Name, Value)`
 
+
+## Description
+
+`file = uiget()` opens a modal dialog box that lists files and folders in the current folder. It enables a user to select or enter the name of a file. `uiget` returns the file name when the user clicks **Open**. If the user clicks **Cancel** or the window close button (X), uigetfile returns `""`.
+
+**NOTE:** If the user intends to choose a directory, they must specify a second output argument to `uiget`. If a directory is chosen in the single-output case, an empty string is returned and the user is presented with a warning. This is true for both a single selection and when using `'MultiSelect'`.
+
+`[file, path] = uiget()` returns the file name and path to a file or folder when the user clicks **Open**. If the user clicks **Cancel** or the window close button (X), then `uiget` returns `""` for both output arguments.
+
+`___ = uiget(basepath)` specifies the start path in which the dialog box opens. If path is empty or is not a valid path, then the dialog box opens in the current working directory.
+
+`___ = uiget(basepath, Name, Value)` specifies dialog box parameters using one or more `Name, Value` pair arguments. See below for a list of valid `Name, Value` pairs.
 
 ## Examples
 
+### Select a single file
+
+```
+>> file = uiget()
+
+file = 
+
+    "uiget.m"
+```
+
+Selecting a directory provides the behavior described above:
+```
+>> file = uiget()
+Warning: One or more paths have been selected without requesting the path output.
+Please specify a second output to uiget to receive these paths. 
+> In uiget (line 96) 
+
+file = 
+
+    ""
+```
+
+### Select a File and Display Full File Specification
+
+```
+function runtest()
+[file, path] = uiget();
+fprintf('User Selected: %s\n', fullfile(path, file))
+end
+
+>> runtest
+User Selected: C:\uiget\uiget.m
+```
+
+### Set a Custom Dialog Title
+
+```
+>> [file, path] = uiget(pwd, 'Title', 'Please Select 42 Files')
+```
+
+### Specify Filters and Filter Descriptions
+
+```
+function runtest()
+filterspec = {'*.m;*.mlx;*.fig;*.mat;*.slx;*.mdl', 'MATLAB Files (*.m,*.mlx,*.fig,*.mat,*.slx,*.mdl)';
+              '*.m;*.mlx','Code files (*.m,*.mlx)'; ...
+              '*.fig','Figures (*.fig)'; ...
+              '*.mat','MAT-files (*.mat)'; ...
+              '*.mdl;*.slx','Models (*.slx, *.mdl)' ...
+              };
+[file, path] = uiget(pwd, 'ExtensionFilter', filterspec);
+fprintf('User Selected: %s\n', fullfile(path, file))
+end
+
+>> runtest
+User Selected: C:\uiget\uiget.m
+```
+
 
 ## Name, Value Pairs
+
 | Parameter | Description | Type | Default Value |
 | :--:      | :--:        | :--: | :--:          |
 | `'MultiSelect'` | Specify whether a user can select multiple files or folders | `logical` | `false` |

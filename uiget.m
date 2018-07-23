@@ -6,6 +6,12 @@ function [file, path] = uiget(basepath, varargin)
 if nargin == 0
     % Use current working directory if no inputs are passed
     basepath = pwd;
+elseif nargin == 1
+    % Check for existence of basepath as a directory, default to current
+    % directory if it doesn't exist
+    if ~exist(basepath, 'dir')
+        basepath = pwd;
+    end
 end
 
 % Parse additional inputs
@@ -24,7 +30,11 @@ if ~isempty(p.Results.ExtensionFilter)
     
     nfilters = size(p.Results.ExtensionFilter, 1);
     for ii = 1:nfilters
-        jExtensionFilter = javax.swing.filechooser.FileNameExtensionFilter(p.Results.Filter{ii, 2}, extensions{ii});
+        if isempty(extensions{ii})
+            % Catch invalid extension specs
+            continue
+        end
+        jExtensionFilter = javax.swing.filechooser.FileNameExtensionFilter(p.Results.ExtensionFilter{ii, 2}, extensions{ii});
         jFC.addChoosableFileFilter(jExtensionFilter)
     end
     
@@ -56,12 +66,12 @@ switch returnVal
         end
     case jFC.CANCEL_OPTION
         % Short-circuit: Return empty array on cancel
-        file = [];
-        path = [];
+        file = "";
+        path = "";
         return
     otherwise
         err = MException("uiget:JFileWindow:unsupportedResult", ...
-                         "Unsupported result returned from JFileChooser: %s. " + ...
+                         "Unsupported result returned from JFileChooser: %s.\n" + ...
                          "Please consult the documentation for the current MATLAB Java version (%s)", ...
                          returnVal, string(java.lang.System.getProperty("java.version")));
         err.throw()
@@ -73,6 +83,24 @@ path = strings(npicked, 1);
 for ii = 1:npicked
     [path(ii), filename, ext] = fileparts(selectionStr(ii));
     file(ii) = filename + ext;
+    
+    % Because we can select directories, we want to have them output as a
+    % path and not a file
+    if exist(fullfile(path(ii), file(ii)), 'dir')
+        path(ii) = fullfile(path(ii), file(ii));
+        file(ii) = "";
+    end
+end
+
+% Since we've now adjusted file in cases where a folder was selected, warn
+% the user if file is going to be empty and they're not requesting path to
+% go with it
+emptyfiletest = (file == '');
+if nargout <= 1 && any(emptyfiletest)
+    warning("uiget:uiget:nopathoutputrequested", ...
+            "One or more paths have been selected without requesting the path output.\n" + ...
+            "Please specify a second output to uiget to receive these paths." ...
+            );
 end
 
 % Simplify path output if needed
@@ -87,7 +115,7 @@ if p.Results.ScalarPathOutput
         path = uniquepaths(1);
         
         warning("uiget:ScalarPathOutput:multipleuniquepaths", ...
-                "Multiple unique paths selected, ignoring %u extra selections", ...
+                "Multiple unique paths selected, ignoring %u extra selections.", ...
                 nuniquepaths - 1);
     end
 end
