@@ -27,3 +27,4 @@ This utility was inspired by: [Making a dialog where the user can choose either 
 | :--:      | :--:        | :--: | :--:          |
 | `'MultiSelect'` | Specify whether a user can select multiple files or folders | `logical` | `false` |
 | `'ScalarPathOutput'` | Specify whether a scalar path is output when using `'MultiSelect'` | `logical` | `false` |
+| `'Title'` | Specify a custom dialog title | `char` vector, `string` scalar | `'Select File or Folder'` |

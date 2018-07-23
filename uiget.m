@@ -16,9 +16,15 @@ p.parse(varargin{:});
 % https://docs.oracle.com/javase/8/docs/api/javax/swing/JFileChooser.html
 jFC = javax.swing.JFileChooser(basepath);
 jFC.setFileSelectionMode(jFC.FILES_AND_DIRECTORIES);
+jFC.setDialogTitle(p.Results.Title)
 
 if p.Results.MultiSelect
     jFC.setMultiSelectionEnabled(true)
+    
+    % Change title if default is being used
+    if any(strcmp(p.UsingDefaults, 'Title'))
+        jFC.setDialogTitle('Select File(s) and/or Folder(s)')
+    end
 else
     jFC.setMultiSelectionEnabled(false)
 end
@@ -88,4 +94,5 @@ function p = buildParser()
     % Add Name,Value pairs
     p.addParameter('MultiSelect', false, @(x)islogical(x))
     p.addParameter('ScalarPathOutput', false, @(x)islogical(x))
+    p.addParameter('Title', 'Select File or Folder', @(x)validateattributes(x, {'char', 'string'}, {'scalartext'}))
 end
