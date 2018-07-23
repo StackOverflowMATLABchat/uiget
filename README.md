@@ -2,6 +2,8 @@
 
 # UIGET
 
+![basewindow](https://github.com/StackOverflowMATLABchat/uiget/blob/master/.doc/basewindow.PNG)
+
 `uiget` opens a dialog box that allows the user to select folder(s) and/or file(s) in a single UI. This is designed as a generic alternative to MATLAB's more specific UI selection tools: [`uigetdir`](https://www.mathworks.com/help/matlab/ref/uigetdir.html) and [`uigetfile`](https://www.mathworks.com/help/matlab/ref/uigetfile.html)
 
 This tool utilizes MATLAB's [`string`](https://www.mathworks.com/help/matlab/ref/string.html) objects, introduced in R2016b.
@@ -43,16 +45,11 @@ file =
     "uiget.m"
 ```
 
-Selecting a directory provides the behavior described above:
+Selecting a directory with a single output provides the behavior described above:
 ```
->> file = uiget()
+>> file = uiget();
 Warning: One or more paths have been selected without requesting the path output.
 Please specify a second output to uiget to receive these paths. 
-> In uiget (line 96) 
-
-file = 
-
-    ""
 ```
 
 ### Select a File and Display Full File Specification
@@ -73,6 +70,8 @@ User Selected: C:\uiget\uiget.m
 >> [file, path] = uiget(pwd, 'Title', 'Please Select 42 Files')
 ```
 
+![42files](https://github.com/StackOverflowMATLABchat/uiget/blob/master/.doc/42files.PNG)
+
 ### Specify Filters and Filter Descriptions
 
 ```
@@ -91,6 +90,7 @@ end
 User Selected: C:\uiget\uiget.m
 ```
 
+![ExtensionFilter](https://github.com/StackOverflowMATLABchat/uiget/blob/master/.doc/extensionfilter.PNG)
 
 ## Name, Value Pairs
 
