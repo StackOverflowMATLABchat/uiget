@@ -73,6 +73,24 @@ path = strings(npicked, 1);
 for ii = 1:npicked
     [path(ii), filename, ext] = fileparts(selectionStr(ii));
     file(ii) = filename + ext;
+    
+    % Because we can select directories, we want to have them output as a
+    % path and not a file
+    if exist(fullfile(path(ii), file(ii)), 'dir')
+        path(ii) = fullfile(path(ii), file(ii));
+        file(ii) = "";
+    end
+end
+
+% Since we've now adjusted file in cases where a folder was selected, warn
+% the user if file is going to be empty and they're not requesting path to
+% go with it
+emptyfiletest = (file == '');
+if nargout <= 1 && any(emptyfiletest)
+    warning("uiget:uiget:nopathoutputrequested", ...
+            "One or more paths have been selected without requesting the path output. " + ...
+            "Please specify a second output to uiget to receieve these paths." ...
+            );
 end
 
 % Simplify path output if needed
