@@ -6,6 +6,12 @@ function [file, path] = uiget(basepath, varargin)
 if nargin == 0
     % Use current working directory if no inputs are passed
     basepath = pwd;
+elseif nargin == 1
+    % Check for existence of basepath as a directory, default to current
+    % directory if it doesn't exist
+    if ~exist(basepath, 'dir')
+        basepath = pwd;
+    end
 end
 
 % Parse additional inputs
@@ -56,8 +62,8 @@ switch returnVal
         end
     case jFC.CANCEL_OPTION
         % Short-circuit: Return empty array on cancel
-        file = [];
-        path = [];
+        file = "";
+        path = "";
         return
     otherwise
         err = MException("uiget:JFileWindow:unsupportedResult", ...
