@@ -30,7 +30,11 @@ if ~isempty(p.Results.ExtensionFilter)
     
     nfilters = size(p.Results.ExtensionFilter, 1);
     for ii = 1:nfilters
-        jExtensionFilter = javax.swing.filechooser.FileNameExtensionFilter(p.Results.Filter{ii, 2}, extensions{ii});
+        if isempty(extensions{ii})
+            % Catch invalid extension specs
+            continue
+        end
+        jExtensionFilter = javax.swing.filechooser.FileNameExtensionFilter(p.Results.ExtensionFilter{ii, 2}, extensions{ii});
         jFC.addChoosableFileFilter(jExtensionFilter)
     end
     
@@ -67,7 +71,7 @@ switch returnVal
         return
     otherwise
         err = MException("uiget:JFileWindow:unsupportedResult", ...
-                         "Unsupported result returned from JFileChooser: %s. " + ...
+                         "Unsupported result returned from JFileChooser: %s.\n" + ...
                          "Please consult the documentation for the current MATLAB Java version (%s)", ...
                          returnVal, string(java.lang.System.getProperty("java.version")));
         err.throw()
@@ -94,8 +98,8 @@ end
 emptyfiletest = (file == '');
 if nargout <= 1 && any(emptyfiletest)
     warning("uiget:uiget:nopathoutputrequested", ...
-            "One or more paths have been selected without requesting the path output. " + ...
-            "Please specify a second output to uiget to receieve these paths." ...
+            "One or more paths have been selected without requesting the path output.\n" + ...
+            "Please specify a second output to uiget to receive these paths." ...
             );
 end
 
@@ -111,7 +115,7 @@ if p.Results.ScalarPathOutput
         path = uniquepaths(1);
         
         warning("uiget:ScalarPathOutput:multipleuniquepaths", ...
-                "Multiple unique paths selected, ignoring %u extra selections", ...
+                "Multiple unique paths selected, ignoring %u extra selections.", ...
                 nuniquepaths - 1);
     end
 end
