@@ -1,4 +1,4 @@
-![Minimum Version](https://img.shields.io/badge/Requires-R2016b%20%28v8.4%29-orange.svg)
+![Minimum Version](https://img.shields.io/badge/Requires-R2016b%20%28v8.4%29-orange.svg) [![MATLAB FEX](https://img.shields.io/badge/MATLAB%20FEX-legtools-brightgreen.svg)](https://www.mathworks.com/matlabcentral/fileexchange/68307-uiget)
 
 # UIGET
 
@@ -103,4 +103,4 @@ User Selected: C:\uiget\uiget.m
 
 1. Extension filter syntax follows that of [uigetfile](https://www.mathworks.com/help/matlab/ref/uigetfile.html), see [the documentation](https://www.mathworks.com/help/matlab/ref/uigetfile.html#mw_d51d3e26-4b0d-4017-a1ed-28162572b6bc) for additional details and examples.
 
-2. The "All Files" file filter is already provided by the dialog window, so explicitly specifying it will create an additional entry
+2. The "All Files" file filter is already provided by the dialog window, so explicitly specifying it will create an additional entry.
