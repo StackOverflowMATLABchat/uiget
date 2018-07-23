@@ -1,6 +1,20 @@
 function [file, path] = uiget(basepath, varargin)
 % UIGET generic folder and/or file selection dialog box
 %
+% Syntax:
+%     file = uiget()
+%     [file, path] = uiget()
+%     ___ = uiget(basepath)
+%     ___ = uiget(basepath, Name, Value)
+%
+% Available Name, Value Pairs:
+%     MultiSelect      - Specify whether a user can select multiple files or folders
+%     ScalarPathOutput - Specify whether a scalar path is output when using MultiSelect
+%     Title            - Specify a custom dialog title
+%     ExtensionFilter  - Specify a custom file extension filter
+%
+% See README.md for detailed documentation and examples
+%
 % See also UIGETDIR, UIGETFILE
 
 if nargin == 0
