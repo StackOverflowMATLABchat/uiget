@@ -100,9 +100,20 @@ for ii = 1:npicked
     
     % Because we can select directories, we want to have them output as a
     % path and not a file
-    if exist(fullfile(path(ii), file(ii)), 'dir')
-        path(ii) = fullfile(path(ii), file(ii));
-        file(ii) = "";
+    if verLessThan('matlab','9.4')
+        % string inputs to fullfile were silently added in R2018a, use char
+        % for R2017a and R2017b
+        tmppath = char(path(ii));
+        tmpfile = char(file(ii));
+        if exist(fullfile(tmppath, tmpfile), 'dir')
+            path(ii) = string(fullfile(tmppath, tmpfile));
+            file(ii) = "";
+        end
+    else
+        if exist(fullfile(path(ii), file(ii)), 'dir')
+            path(ii) = fullfile(path(ii), file(ii));
+            file(ii) = "";
+        end
     end
 end
 
