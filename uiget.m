@@ -12,6 +12,7 @@ function [file, path] = uiget(basepath, varargin)
 %     ScalarPathOutput - Specify whether a scalar path is output when using MultiSelect
 %     Title            - Specify a custom dialog title
 %     ExtensionFilter  - Specify a custom file extension filter
+%     ForceCharOutput  - Force return of a cell array of char
 %
 % See README.md for detailed documentation and examples
 %
@@ -145,6 +146,12 @@ if p.Results.ScalarPathOutput
     end
 end
 
+% Convert to cell array of char if flag is set
+if p.Results.ForceCharOutput
+    file = cellstr(file);
+    path = cellstr(path);
+end
+
 end
 
 function p = buildParser()
@@ -163,6 +170,7 @@ p.addParameter('MultiSelect', false, @(x)islogical(x))
 p.addParameter('ScalarPathOutput', false, @(x)islogical(x))
 p.addParameter('Title', 'Select File or Folder', @(x)validateattributes(x, {'char', 'string'}, {'scalartext'}))
 p.addParameter('ExtensionFilter', [], @(x)validateattributes(x, {'cell'}, {'ncols', 2}))
+p.addParameter('ForceCharOutput', false, @(x)islogical(x))
 end
 
 function extensions = parsefilter(incell)
