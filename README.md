@@ -100,6 +100,7 @@ User Selected: C:\uiget\uiget.m
 | `'ScalarPathOutput'` | Specify whether a scalar path is output when using `'MultiSelect'` | `logical` | `false` |
 | `'Title'` | Specify a custom dialog title | `char` vector, `string` scalar | `'Select File or Folder'` |
 | `'ExtensionFilter'` | Specify a custom file extension filter | `{n x 2}` `cell` array of text, where each row is `{extension(s), description}`<sup>1, 2</sup> | All Files |
+| `'ForceCharOutput'` | Force return of a cell array of `char` | `logical` | `false` |
 
 1. Extension filter syntax follows that of [uigetfile](https://www.mathworks.com/help/matlab/ref/uigetfile.html), see [the documentation](https://www.mathworks.com/help/matlab/ref/uigetfile.html#mw_d51d3e26-4b0d-4017-a1ed-28162572b6bc) for additional details and examples.
 
