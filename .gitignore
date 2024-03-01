@@ -3,3 +3,6 @@
 
 # OSX / *nix default autosave extension
 *.m~
+
+# Python env (for pre-commit)
+.venv/

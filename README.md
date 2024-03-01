@@ -40,7 +40,7 @@ This utility was inspired by: [Making a dialog where the user can choose either 
 ```
 >> file = uiget()
 
-file = 
+file =
 
     "uiget.m"
 ```
@@ -49,7 +49,7 @@ Selecting a directory with a single output provides the behavior described above
 ```
 >> file = uiget();
 Warning: One or more paths have been selected without requesting the path output.
-Please specify a second output to uiget to receive these paths. 
+Please specify a second output to uiget to receive these paths.
 ```
 
 ### Select a File and Display Full File Specification

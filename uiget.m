@@ -22,8 +22,8 @@ if nargin == 0
     % Use current working directory if no inputs are passed
     basepath = pwd;
 elseif nargin == 1
-    % Check for existence of basepath as a directory, default to current
-    % directory if it doesn't exist
+    % Check for existence of basepath as a directory, default to current directory if it doesn't
+    % exist
     if ~exist(basepath, 'dir')
         basepath = pwd;
     end
@@ -42,7 +42,7 @@ jFC.setDialogTitle(p.Results.Title)
 % Build file filter
 if ~isempty(p.Results.ExtensionFilter)
     extensions = parsefilter(p.Results.ExtensionFilter(:, 1));
-    
+
     nfilters = size(p.Results.ExtensionFilter, 1);
     for ii = 1:nfilters
         if isempty(extensions{ii})
@@ -52,14 +52,14 @@ if ~isempty(p.Results.ExtensionFilter)
         jExtensionFilter = javax.swing.filechooser.FileNameExtensionFilter(p.Results.ExtensionFilter{ii, 2}, extensions{ii});
         jFC.addChoosableFileFilter(jExtensionFilter)
     end
-    
+
     tmp = jFC.getChoosableFileFilters();
     jFC.setFileFilter(tmp(2))
 end
 
 if p.Results.MultiSelect
     jFC.setMultiSelectionEnabled(true)
-    
+
     % Change title if default is being used
     if any(strcmp(p.UsingDefaults, 'Title'))
         jFC.setDialogTitle('Select File(s) and/or Folder(s)')
@@ -72,8 +72,7 @@ end
 returnVal = jFC.showOpenDialog([]);
 switch returnVal
     case jFC.APPROVE_OPTION
-        % Selection string will be empty if getSelectedFiles is used when
-        % MultiSelect is disabled
+        % Selection string will be empty if getSelectedFiles is used when MultiSelect is disabled
         if jFC.isMultiSelectionEnabled
             selectionStr = string(jFC.getSelectedFiles());
         else
@@ -98,12 +97,10 @@ path = strings(npicked, 1);
 for ii = 1:npicked
     [path(ii), filename, ext] = fileparts(selectionStr(ii));
     file(ii) = filename + ext;
-    
-    % Because we can select directories, we want to have them output as a
-    % path and not a file
+
+    % Because we can select directories, we want to have them output as a path and not a file
     if verLessThan('matlab','9.4')
-        % string inputs to fullfile were silently added in R2018a, use char
-        % for R2017a and R2017b
+        % string inputs to fullfile were silently added in R2018a, use char for R2017a and R2017b
         tmppath = char(path(ii));
         tmpfile = char(file(ii));
         if exist(fullfile(tmppath, tmpfile), 'dir')
@@ -118,9 +115,8 @@ for ii = 1:npicked
     end
 end
 
-% Since we've now adjusted file in cases where a folder was selected, warn
-% the user if file is going to be empty and they're not requesting path to
-% go with it
+% Since we've now adjusted file in cases where a folder was selected, warn the user if file is going
+% to be empty and they're not requesting path to go with it
 emptyfiletest = (file == '');
 if nargout <= 1 && any(emptyfiletest)
     warning("uiget:uiget:nopathoutputrequested", ...
@@ -131,15 +127,14 @@ end
 
 % Simplify path output if needed
 if p.Results.ScalarPathOutput
-    % Check for number of unique paths
-    % If more than one is present, use the first & throw a warning
+    % Check for number of unique paths If more than one is present, use the first & throw a warning
     uniquepaths = unique(path);
     nuniquepaths = numel(uniquepaths);
     if nuniquepaths == 1
         path = uniquepaths;
     elseif nuniquepaths > 1
         path = uniquepaths(1);
-        
+
         warning("uiget:ScalarPathOutput:multipleuniquepaths", ...
                 "Multiple unique paths selected, ignoring %u extra selections.", ...
                 nuniquepaths - 1);
@@ -157,8 +152,7 @@ end
 function p = buildParser()
 % Validate input Name,Value pairs
 
-% Initialize verbosely, since inputParser apparently doesn't have a
-% constructor that takes inputs...
+% Initialize verbosely, since inputParser apparently doesn't have a constructor that takes inputs
 p = inputParser();
 p.FunctionName = 'uiget';
 p.CaseSensitive = false;
@@ -174,12 +168,11 @@ p.addParameter('ForceCharOutput', false, @(x)islogical(x))
 end
 
 function extensions = parsefilter(incell)
-% Parse the extension filter extensions into a format usable by 
+% Parse the extension filter extensions into a format usable by
 % javax.swing.filechooser.FileNameExtensionFilter
-% 
-% Since we're keeping with the uigetdir-esque extension syntax
-% (e.g. *.extension), we need strip off '*.' from each for compatibility
-% with the Java component.
+%
+% Since we're keeping with the uigetdir-esque extension syntax (e.g. *.extension), we need strip off
+% '*.' from each for compatibility with the Java component.
 extensions = cell(size(incell));
 for ii = 1:numel(incell)
     exp = '\*\.(\w+)';
